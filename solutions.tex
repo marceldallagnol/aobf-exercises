@@ -2,7 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
-\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,bbm}
 \usepackage[capitalize,nameinlink]{cleveref}
 \usepackage{mathtools}
 \usepackage{xcolor}
@@ -19,19 +19,28 @@
 \newcommand{\N}{\mathbb N}
 \newcommand{\Z}{\mathbb Z}
 \newcommand{\R}{\mathbb R}
+\newcommand{\chf}{\mathbbm{1}}
 \newcommand{\poly}{\mathrm{poly}}
 \newcommand{\polylog}{\mathrm{polylog}}
 \newcommand{\supp}{\mathrm{supp}}
 \newcommand{\Inf}{\mathbf{Inf}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\W}{\mathbf{W}}
 \newcommand{\Var}[2]{\mathbf{Var}_{#1}\left[#2\right]}
 \newcommand{\Stab}{\mathbf{Stab}}
 \newcommand{\set}[1]{\{#1\}}
+\newcommand{\ith}{$i^\text{th}$}
 \newcommand{\eqn}[1]{\begin{equation*}#1\end{equation*}}
 \newcommand{\hf}{\widehat{f}}
+\newcommand{\sumi}{\sum_{i \in [n]}}
+\newcommand{\sumj}{\sum_{j \in [n]}}
+\newcommand{\sumk}{\sum_{k \in [n]}}
+\newcommand{\suml}{\sum_{\ell \in [n]}}
 \newcommand{\sumx}{\sum_{x \in \bitset^n}}
 \newcommand{\sumxf}{\sum_{x \in \fbitset^n}}
 \newcommand{\sumS}{\sum_{S \subseteq [n]}}
 \renewcommand{\ip}[1]{\left\langle#1\right\rangle}
+\newcommand{\TODO}{{\color{red}TODO}}
 
 \begin{document}
 \section{Chapter 1}
@@ -139,7 +148,7 @@ For all $S \subseteq [n]$, we have $\hat{\mathbf{f}}(S) = \ip{\chi_S,\mathbf{f}}
 \eqn{\E{\mathbf{f}}{\hat{\mathbf{f}}(S)} = \E{\mathbf{f}}{\frac1{2^n}\sumxf \mathbf{f}(x) \chi_S(x)} = \frac1{2^n}\sumxf\chi_S(x) \E{\mathbf{f}}{\mathbf{f}(x)} = 0.}
 Moreover,
 \begin{align*}
-    \Var{}{\mathbf{f}(S)} = \E{\mathbf{f}}{\mathbf{\hat{f}}(S)^2} &= \frac1{2^{2n}}\E{\mathbf{f}}{2^n + \sumx \sum_{\substack{y \in \fbitset^n\\ y \neq x}} \chi_S(x) \chi_S(y) \mathbf{f}(x) \mathbf{f}(y)}\\
+    \Var{}{\mathbf{\hf}(S)} = \E{\mathbf{f}}{\mathbf{\hat{f}}(S)^2} &= \frac1{2^{2n}}\E{\mathbf{f}}{2^n + \sumx \sum_{\substack{y \in \fbitset^n\\ y \neq x}} \chi_S(x) \chi_S(y) \mathbf{f}(x) \mathbf{f}(y)}\\
     &= \frac1{2^n} + \sumx \sum_{\substack{y \in \fbitset^n\\ y \neq x}} \chi_S(x) \chi_S(y) \E{\mathbf{f}}{\mathbf{f}(x) \mathbf{f}(y)}\\
     &= \frac1{2^n}.
 \end{align*}
@@ -245,4 +254,181 @@ Moreover,
 \subsection{}
 
 \subsection{}
+
+\section{Chapter 2}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\begin{enumerate}[(a)]
+    \item ($\Longleftarrow$) Since $f(-x) = \sum_{i = 1}^n -x_i = - \sum_{i = 1}^n x_i = - f(x)$, the function is odd; and if $x \preceq y$, then $\sum x_i \leq \sum y_i$, so $f(x) \leq f(y)$ and thus $f$ is monotone.
+    
+    ($\Longrightarrow$) Since $f$ is symmetric, $f: [-n, n] \to \fbitset$, where $f(k) = f(x)$ for any $x$ such that $\sum x_i = k$ is well-defined; moreover, $f(k) \leq f(\ell)$ when $k \leq \ell$ by monotonicity. Taking $a \in [-n ,n]$ such that $f(a) = 1$ and $f(a - 1) = -1$ (if it exists; otherwise take $a_0 = -n$), then $f(x) = \textsf{sgn}\left(\frac1{2} - a + \sum_{i = 1}^n x_i\right)$.
+    
+    \item By the previous item, $f$ is a weighted majority with equal unit weights. By virtue of being odd, we thus have $f(-1) = -f(1)$ implying $f(k) = \textsf{sgn}(k)$, and $f = \text{Maj}_n$; moreover, $n$ is odd for otherwise we would have $f(0) = -f(0) \in \fbitset$, a contradiction.
+\end{enumerate}
+
+\subsection{}
+($\Longrightarrow$) We have $f(x) = \textsf{sgn}\left(r - \frac1{2}\sum_i \abs{x_i - z_i}\right) = \textsf{sgn}\left(r - \frac1{2}\sum_i (1 - z_i \cdot x_i)\right) = \textsf{sgn}\left(r - \frac{n}{2} + \sum_i z_i \cdot x_i\right)$.
+
+\noindent ($\Longleftarrow$) Set $r \coloneqq a_0 - \frac{n}{2}$ and $z \in \fbitset^n$ with $z_i = a_i$.
+
+\subsection{}
+\begin{enumerate}[(a)]
+    \item We have $\Inf_i[f] = \E{x}{D_i f(x)^2} = \E{x}{\abs{D_i f(x)}} \geq \abs{\E{x}{D_i f(x)}} = \abs{\hf(i)}$. Moreover, equality holds iff the middle inequality is, in fact an equality; that is, if $\abs{D_i f(x)} = D_i f(x)$ for all $x$, which is equivalent to $f$ being unate in the \ith direction:
+    \begin{align*}
+        \forall x, \abs{D_i f(x)} = D_i f(x) &\iff \forall x, \abs{f(x^{i \mapsto 1}) - f(x^{i \mapsto 1})} = f(x^{i \mapsto 1}) - f(x^{i \mapsto 1})\\
+        &\iff \forall x, f(x^{i \mapsto 1}) \geq f(x^{i \mapsto -1}) \text{ or } \forall x, f(x^{i \mapsto -1}) \geq f(x^{i \mapsto 1}).
+    \end{align*}
+    
+    \item Indeed: if $f$ is unate, $\sumi \hf(i) \leq \sumi \abs{\hf(i)} = \sumi \Inf_i [f] = \I[f]$.
+\end{enumerate}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+We have $\Inf_i[f] = \sum_{i \in T} \hf(T)^2 \geq \hf(S)^2 > 0$.
+
+\subsection{}
+Using the fact that $\mathbf{\hf}(S)$ has mean 0 and variance $2^{-n}$ for every $S \subseteq [n]$, we have, for all $i \in [n]$:
+\eqn{\E{\mathbf{f}}{\Inf_i[\mathbf{f}]} = \sum_{i \in S} \E{\mathbf{f}}{\mathbf{\hf}(S)^2} = 2^{n-1} \cdot 2^{-n} = \frac1{2},}
+so $\E{\mathbf{f}}{\I[\mathbf{f}]} = \frac{n}{2}$.
+
+\subsection{}
+\TODO
+\begin{enumerate}[(a)]
+    \item We have
+          \eqn{\E{x}{f(x)} = 2 \cdot \P[f(x) = 1] - 1 = 2 \cdot (1 - 2^{-w})^{2^w} - 1,}%{ \rightarrow \frac{2}{e} - 1 \approx }
+          \eqn{\Var{}{f} = 1 - \E{x}{f(x)}^2 = 4 \cdot (1 - 2^{-w})^{2^{w + 1}} - 4 \cdot (1 - 2^{-w})^{2^w},}
+          and, since $w \to \infty$ as $n \to \infty$, we obtain $\lim_{n \to \infty} \E{x}{f(x)} = \frac{2}{e} - 1 \approx -0.264$ as well as $\lim_{n \to \infty} \Var{}{f} = \frac{4}{e^2} - \frac{4}{e} \approx -0.93$.
+          
+    \item $D_1 f(x) = 0$ except when the first coordinate flips the value of $f$; that is, when all other members of its tribe vote $-1$ and all other tribes vote $1$.
+    
+    \item $\Inf_i[f] = \E{x}{D_i f(x)^2} = 2^{1-w} \cdot (1 - 2^{-w})^{2^w - 1} = \frac{2}{2^w - 1} \cdot (1 - 2^{-w})^{2^w}$. Since $w = \log n - \log w$, we have: $\lim_{n \to \infty} \Inf_i[f] = \Theta\left(2^{-w}\right) = \Theta\left(\frac{w}{n}\right) = \Theta\left(\frac{\log n}{n}\right)$; consequently, $\I[f] = \Theta(\log n)$.
+\end{enumerate}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+\begin{enumerate}[(a)]
+    \item Since $i$ is pivotal exactly when the $n - 1$ remaining voters divide their votes equally, we have $\Inf_i \left[\text{Maj}_n\right] = \binom{n-1}{\frac{n-1}{2}} \cdot 2^{1-n}$.
+    
+    \item Indeed:
+    \begin{align*}
+        \frac{\Inf_i \left[\text{Maj}_n\right]}{\Inf_i \left[\text{Maj}_{n+2}\right]} &= \frac{(n-1) \cdot (n - 2) \cdots \left(\frac{n-1}{2} + 1\right)}{\frac{n-1}{2} \cdots 2 \cdot 1} \cdot \frac{\frac{n+1}{2} \cdots 2 \cdot 1}{(n + 1) \cdot n \cdots \left(\frac{n+1}{2} + 1\right)} \cdot \frac{2^{1-n}}{2^{-1-n}}\\
+        &= 4 \cdot \frac{(n-1)!}{(n+1)!} \cdot \left(\frac{n+1}{2}\right)^2\\
+        &= \frac{n+1}{n} > 1.
+    \end{align*}
+    
+    \item We have:
+    \begin{align*}
+        \Inf_i[\text{Maj}_n] &= \binom{n-1}{\frac{n-1}{2}} \cdot 2^{1-n}\\
+        &= 2 \cdot \frac{(n-1)!}{\left(\left(\frac{n-1}{2}\right)!\right)^2} \cdot 2^{1-n}\\
+        &= \cdot 2^{1-n} \frac{\left(\frac{n-1}{e}\right)^{n-1}}{\left(\frac{n-1}{2e}\right)^{n-1}} \cdot \frac{\sqrt{2 \pi (n-1)} + O(1/\sqrt{n})}{\pi (n-1) + O(1)}\\
+        &= \sqrt{\frac{2}{\pi}} \cdot \frac1{\sqrt{n-1}} + O\left(\frac1{n^{3/2}}\right)\\
+        &= \sqrt{\frac{2}{\pi}} \cdot \frac1{\sqrt{n}} + O\left(\frac1{n^{3/2}}\right).
+    \end{align*}
+    
+    \item Since $f$ is monotone, $\W^1[f] = \sumi \hf(i)^2 = \sumi \Inf_i[f]^2$ by Proposition 2.21, and $\frac{2}{\pi n} \leq \Inf_i[f]^2 \leq \frac{2}{\pi n} + O(1/n^2)$, we have $2/\pi \leq n \cdot \Inf_1[f] = \W^1[f] \leq 2/\pi + O(1/n)$.
+    
+    \item $\sqrt{2/\pi} \cdot \sqrt{n} \leq \Inf_1[f] = \I[\text{Maj}_n] = \sqrt{2/\pi} \cdot \sqrt{n} + O(1/n)$.
+    
+    \item \TODO This follows from the fact that the \ith variable is influential when $n/2 - 1$ of the voters vote for $\text{Maj}_n(n/2)$ and the remaining $n/2$ voters vote for $-\text{Maj}_n(n/2)$. Thus,
+    \eqn{\Inf_i[\text{Maj}_n] = \binom{n-1}{n/2} \cdot 2^{1-n} = \frac{\binom{n-1}{n/2}}{2 \cdot \binom{n-2}{n/2-1}} \cdot \Inf_i[\text{Maj}_{n-1}] = \left(1 - \frac1{n}\right) \cdot \Inf_i[\text{Maj}_{n-1}]}
+\end{enumerate}
+
+\section{Chapter 3}
+
+\section{Chapter 4}
+
+\section{Chapter 5}
+
+\section{Chapter 6}
+
+\section{Chapter 7}
+
+\section{Chapter 8}
+
+\section{Chapter 9}
+
+\subsection{}
+
+\subsection{}
+
+Let $f(x) = \beta + \sumi \alpha_i x_i$. Then,
+
+\begin{align*}
+    \E{x}{f(x)^4} &= \beta^4 + \beta^3 \sumi \alpha_i \E{x}{x_i} + \beta^2 \sumi \sumj \alpha_i \alpha_j \E{x}{x_i x_j}\\
+    &+ \beta \sumi \sumj \sumk \alpha_i \alpha_j \alpha_k \E{x}{x_i x_j x_k} + \sumi \sumj \sumk \suml \alpha_i \alpha_j \alpha_k \alpha_\ell \E{x}{x_i x_j x_k x_\ell}\\
+    &= \beta^4 + \beta^2 \sumi \alpha_i^2 \E{}{x_i^2} + 2 \sum_{i \neq j} \alpha_i^2 \alpha_j^2 \E{}{x_i^2} \E{}{x_j^2} + \sumi \alpha_i^4 \E{}{x_i^4}\\
+    &\leq \beta^4 + \beta^2 \sumi \alpha_i^2 \E{}{x_i^2} + 2 \sum_{i \neq j} \alpha_i^2 \alpha_j^2 \E{}{x_i^2} \E{}{x_j^2} + 3 \sumi \alpha_i^4 \E{}{x_i^2}^2\\
+    &\leq \beta^4 + \beta^2 \sumi \alpha_i^2 \E{}{x_i^2} + 3 \sumi \sumj \alpha_i^2 \alpha_j^2 \E{}{x_i^2} \E{}{x_j^2}
+\end{align*}
+and
+
+\begin{align*}
+    \E{x}{f(x)^2}^2 &= \left(\beta^2 + \beta \sumi \alpha_i \E{x}{x_i} + \sumi \sumj \alpha_i \alpha_j \E{x}{x_i x_j}\right)^2\\
+    &= \left(\beta^2 + \sumi \alpha_i^2 \E{x}{x_i^2}\right)^2\\
+    &= \beta^4 + 2\beta^2 \sumi \alpha_i^2 \E{x}{x_i^2} + \sumi \sumj \alpha_i^4 \alpha_j^4 \E{}{x_i^2}^2 \E{}{x_j^2}^2.
+\end{align*}
+
+Comparing term by term, we see that $\E{x}{f(x)^4} \leq 3 \E{x}{f(x)^2}^2$; in fact, if the bits $x_i$ are 2-reasonable, then so is $f(x)$.
+
+\subsection{}
+\begin{enumerate}[(a)]
+    \item We have
+
+    \begin{align*}
+        \E{}{f^4} &= \sum_{\substack{S,T,U,V \subseteq [n]\\\abs{S} = \abs{T} = \abs{U} = \abs{V} = k}} \E{}{x^S x^T x^U x^V}\\
+        &\geq \sum_{\substack{A_1, A_2, A_3, A_4, A_5, A_6 \subseteq [n]\\\abs{A_i} = k/3,~ A_i \cap A_j = \varnothing\\S = A_1 \cup A_2 \cup A_3\\T = A_4 \cup A_5 \cup A_6\\U = A_1 \cup A_3 \cup A_4\\V = A_2 \cup A_5 \cup A_6}} \E{}{\left(x^S\right)^2 \left(x^T\right)^2}\\
+        &= \binom{n}{k/3, k/3, k/3, k/3, k/3, k/3, n - 2k}.
+    \end{align*}
+    Since
+    \eqn{\E{}{f^2} = \sum_{\substack{S, T \subseteq [n]\\\abs{S} = \abs{T} = k}} \E{}{x^S x^T} = \sum_{\substack{S [n]\\\abs{S} k}} \E{}{\left(x^S\right)^2} = \binom{n}{k},}
+    the result follows.
+
+    \item Indeed:
+    
+    \begin{align*}
+        \binom{n}{k/3, k/3, k/3, k/3, k/3, k/3, n - 2k} &= \prod_{i = 0}^5 \binom{n - ik/3}{k/3}\\
+        &= \prod_{i = 1}^5 \frac{(n - ik/3)!}{(k/3)! (n-(i+1)k/3)!}\\
+        &= \frac{n!}{\left(\frac{k}{3}!\right)^6 (n - 2k)!}
+    \end{align*}
+    and
+    
+    \eqn{\binom{n}{k}^2 = \frac{n!^2}{k!^2 (n-k)!^2}}
+    imply
+    
+    \begin{align*}
+        \frac{\binom{n}{k/3, k/3, k/3, k/3, k/3, k/3, n - 2k}}{\binom{n}{k}^2} &= \frac{(n-k)!^2}{n! (n-2k)!} \cdot \frac{k!^2}{(k/3)!^6}\\
+        &= \Theta\left(\frac{n-k}{\sqrt{n(n-2k)}} \cdot \left(1 - \frac{k}{n}\right)^n \cdot \left(1 + \frac{k}{n-2k}\right)^{n-2k} \cdot \frac{9^k}{k^2}\right).
+    \end{align*}
+    Using $\lim_{n \to \infty} (n-k)/\sqrt{n(n-2k)} = 1$, as well as $\lim_{n \to \infty}(1-k/n)^n = e^{-k}$ and $\lim_{n \to \infty}(1-k/(n-2k))^{n-2k} = e^k$, we conclude that the ratio is $\Theta(k^{-2} 9^k)$. Finally, since $\norm{f}_4^4 = \Omega(k^{-2}) \cdot 9^k \norm{f}_2^4$, taking fourth roots on both sides shows the desired lower bound.
+    
+\end{enumerate}
 \end{document}

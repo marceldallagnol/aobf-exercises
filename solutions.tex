@@ -13,7 +13,7 @@
 \newcommand{\bitset}{\{0,1\}}
 \newcommand{\fbitset}{\{1,-1\}}
 \newcommand{\tritset}{\{0,1,\bot\}}
-\newcommand{\E}[2]{\mathbb E_{#1}\left[#2\right]}
+\newcommand{\E}[2][]{\mathbb E_{#1}\left[#2\right]}
 \renewcommand{\P}{\mathbb P}
 \newcommand{\F}{\mathbb F}
 \newcommand{\N}{\mathbb N}
@@ -40,6 +40,7 @@
 \newcommand{\sumxf}{\sum_{x \in \fbitset^n}}
 \newcommand{\sumS}{\sum_{S \subseteq [n]}}
 \renewcommand{\ip}[1]{\left\langle#1\right\rangle}
+\DeclareMathOperator{\T}{T}
 \newcommand{\TODO}{{\color{red}TODO}}
 
 \begin{document}
@@ -145,11 +146,11 @@ and since $\chi_S(x) \in \fbitset$ and $\abs{\set{x \in \bitset^n : f(x) = 1}}$ 
 
 \subsection{}
 For all $S \subseteq [n]$, we have $\hat{\mathbf{f}}(S) = \ip{\chi_S,\mathbf{f}} = \frac1{2^n}\sumxf\mathbf{f}(x) \chi_S(x)$, so 
-\eqn{\E{\mathbf{f}}{\hat{\mathbf{f}}(S)} = \E{\mathbf{f}}{\frac1{2^n}\sumxf \mathbf{f}(x) \chi_S(x)} = \frac1{2^n}\sumxf\chi_S(x) \E{\mathbf{f}}{\mathbf{f}(x)} = 0.}
+\eqn{\E[\mathbf{f}]{\hat{\mathbf{f}}(S)} = \E[\mathbf{f}]{\frac1{2^n}\sumxf \mathbf{f}(x) \chi_S(x)} = \frac1{2^n}\sumxf\chi_S(x) \E{\mathbf{f}}{\mathbf{f}(x)} = 0.}
 Moreover,
 \begin{align*}
-    \Var{}{\mathbf{\hf}(S)} = \E{\mathbf{f}}{\mathbf{\hat{f}}(S)^2} &= \frac1{2^{2n}}\E{\mathbf{f}}{2^n + \sumx \sum_{\substack{y \in \fbitset^n\\ y \neq x}} \chi_S(x) \chi_S(y) \mathbf{f}(x) \mathbf{f}(y)}\\
-    &= \frac1{2^n} + \sumx \sum_{\substack{y \in \fbitset^n\\ y \neq x}} \chi_S(x) \chi_S(y) \E{\mathbf{f}}{\mathbf{f}(x) \mathbf{f}(y)}\\
+    \Var{}{\mathbf{\hf}(S)} = \E[\mathbf{f}]{\mathbf{\hat{f}}(S)^2} &= \frac1{2^{2n}}\E[\mathbf{f}]{2^n + \sumx \sum_{\substack{y \in \fbitset^n\\ y \neq x}} \chi_S(x) \chi_S(y) \mathbf{f}(x) \mathbf{f}(y)}\\
+    &= \frac1{2^n} + \sumx \sum_{\substack{y \in \fbitset^n\\ y \neq x}} \chi_S(x) \chi_S(y) \E[\mathbf{f}]{\mathbf{f}(x) \mathbf{f}(y)}\\
     &= \frac1{2^n}.
 \end{align*}
 
@@ -210,10 +211,10 @@ Moreover,
     
     \item We have
     \begin{align*}
-        \E{x,y,z}{f(x)f(y)f(z)f(x+y+z)} &= \E{x,y}{f(x)f(y)\E{z}{f(z)f(x+y+z)}}\\
-        &= \E{x,y}{f(x) f(y) \cdot (f * f)(x+y)}\\
-        &= \E{x}{f(x) \E{y}{f(y) (f * f)(x+y)}}\\
-        &= \E{x}{f(x) \cdot (f * f * f)(x)}\\
+        \E[x,y,z]{f(x)f(y)f(z)f(x+y+z)} &= \E[x,y]{f(x)f(y)\E[z]{f(z)f(x+y+z)}}\\
+        &= \E[x,y]{f(x) f(y) \cdot (f * f)(x+y)}\\
+        &= \E[x]{f(x) \E[y]{f(y) (f * f)(x+y)}}\\
+        &= \E[x]{f(x) \cdot (f * f * f)(x)}\\
         &= \ip{f, f * f * f}\\
         &= \ip{\hat{f}, \widehat{f * f * f}}\\
         &= \sumS \hat{f}(S)^4.
@@ -278,7 +279,7 @@ Moreover,
 
 \subsection{}
 \begin{enumerate}[(a)]
-    \item We have $\Inf_i[f] = \E{x}{D_i f(x)^2} = \E{x}{\abs{D_i f(x)}} \geq \abs{\E{x}{D_i f(x)}} = \abs{\hf(i)}$. Moreover, equality holds iff the middle inequality is, in fact an equality; that is, if $\abs{D_i f(x)} = D_i f(x)$ for all $x$, which is equivalent to $f$ being unate in the \ith direction:
+    \item We have $\Inf_i[f] = \E[x]{D_i f(x)^2} = \E[x]{\abs{D_i f(x)}} \geq \abs{\E[x]{D_i f(x)}} = \abs{\hf(i)}$. Moreover, equality holds iff the middle inequality is, in fact an equality; that is, if $\abs{D_i f(x)} = D_i f(x)$ for all $x$, which is equivalent to $f$ being unate in the \ith direction:
     \begin{align*}
         \forall x, \abs{D_i f(x)} = D_i f(x) &\iff \forall x, \abs{f(x^{i \mapsto 1}) - f(x^{i \mapsto 1})} = f(x^{i \mapsto 1}) - f(x^{i \mapsto 1})\\
         &\iff \forall x, f(x^{i \mapsto 1}) \geq f(x^{i \mapsto -1}) \text{ or } \forall x, f(x^{i \mapsto -1}) \geq f(x^{i \mapsto 1}).
@@ -302,20 +303,20 @@ We have $\Inf_i[f] = \sum_{i \in T} \hf(T)^2 \geq \hf(S)^2 > 0$.
 
 \subsection{}
 Using the fact that $\mathbf{\hf}(S)$ has mean 0 and variance $2^{-n}$ for every $S \subseteq [n]$, we have, for all $i \in [n]$:
-\eqn{\E{\mathbf{f}}{\Inf_i[\mathbf{f}]} = \sum_{i \in S} \E{\mathbf{f}}{\mathbf{\hf}(S)^2} = 2^{n-1} \cdot 2^{-n} = \frac1{2},}
-so $\E{\mathbf{f}}{\I[\mathbf{f}]} = \frac{n}{2}$.
+\eqn{\E[\mathbf{f}]{\Inf_i[\mathbf{f}]} = \sum_{i \in S} \E[\mathbf{f}]{\mathbf{\hf}(S)^2} = 2^{n-1} \cdot 2^{-n} = \frac1{2},}
+so $\E[\mathbf{f}]{\I[\mathbf{f}]} = \frac{n}{2}$.
 
 \subsection{}
 \TODO
 \begin{enumerate}[(a)]
     \item We have
-          \eqn{\E{x}{f(x)} = 2 \cdot \P[f(x) = 1] - 1 = 2 \cdot (1 - 2^{-w})^{2^w} - 1,}%{ \rightarrow \frac{2}{e} - 1 \approx }
-          \eqn{\Var{}{f} = 1 - \E{x}{f(x)}^2 = 4 \cdot (1 - 2^{-w})^{2^{w + 1}} - 4 \cdot (1 - 2^{-w})^{2^w},}
-          and, since $w \to \infty$ as $n \to \infty$, we obtain $\lim_{n \to \infty} \E{x}{f(x)} = \frac{2}{e} - 1 \approx -0.264$ as well as $\lim_{n \to \infty} \Var{}{f} = \frac{4}{e^2} - \frac{4}{e} \approx -0.93$.
+          \eqn{\E[x]{f(x)} = 2 \cdot \P[f(x) = 1] - 1 = 2 \cdot (1 - 2^{-w})^{2^w} - 1,}%{ \rightarrow \frac{2}{e} - 1 \approx }
+          \eqn{\Var{}{f} = 1 - \E[x]{f(x)}^2 = 4 \cdot (1 - 2^{-w})^{2^{w + 1}} - 4 \cdot (1 - 2^{-w})^{2^w},}
+          and, since $w \to \infty$ as $n \to \infty$, we obtain $\lim_{n \to \infty} \E[x]{f(x)} = \frac{2}{e} - 1 \approx -0.264$ as well as $\lim_{n \to \infty} \Var{}{f} = \frac{4}{e^2} - \frac{4}{e} \approx -0.93$.
           
     \item $D_1 f(x) = 0$ except when the first coordinate flips the value of $f$; that is, when all other members of its tribe vote $-1$ and all other tribes vote $1$.
     
-    \item $\Inf_i[f] = \E{x}{D_i f(x)^2} = 2^{1-w} \cdot (1 - 2^{-w})^{2^w - 1} = \frac{2}{2^w - 1} \cdot (1 - 2^{-w})^{2^w}$. Since $w = \log n - \log w$, we have: $\lim_{n \to \infty} \Inf_i[f] = \Theta\left(2^{-w}\right) = \Theta\left(\frac{w}{n}\right) = \Theta\left(\frac{\log n}{n}\right)$; consequently, $\I[f] = \Theta(\log n)$.
+    \item $\Inf_i[f] = \E[x]{D_i f(x)^2} = 2^{1-w} \cdot (1 - 2^{-w})^{2^w - 1} = \frac{2}{2^w - 1} \cdot (1 - 2^{-w})^{2^w}$. Since $w = \log n - \log w$, we have: $\lim_{n \to \infty} \Inf_i[f] = \Theta\left(2^{-w}\right) = \Theta\left(\frac{w}{n}\right) = \Theta\left(\frac{\log n}{n}\right)$; consequently, $\I[f] = \Theta(\log n)$.
 \end{enumerate}
 
 \subsection{}
@@ -362,6 +363,31 @@ so $\E{\mathbf{f}}{\I[\mathbf{f}]} = \frac{n}{2}$.
     \eqn{\Inf_i[\text{Maj}_n] = \binom{n-1}{n/2} \cdot 2^{1-n} = \frac{\binom{n-1}{n/2}}{2 \cdot \binom{n-2}{n/2-1}} \cdot \Inf_i[\text{Maj}_{n-1}] = \left(1 - \frac1{n}\right) \cdot \Inf_i[\text{Maj}_{n-1}]}
 \end{enumerate}
 
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
+Indeed: $\abs{\T_\rho f(x)} = \abs{\E[y \sim N_\rho(x)]{f(y)}} \leq \E[x \sim N_\rho(y)]{\abs{f(y)}} = \T_\rho \abs{f}(x)$. Moreover, when $-1 < \rho < 1$, the support of $N_\rho(x)$ (for any $x$) is the entire hypercube $\fbitset^n$; therefore, equality implies $\abs{f(x)} \geq 0$ for all $x$, or, in other words, that $f$ is either non-negative or non-positive.
+
 \section{Chapter 3}
 
 \section{Chapter 4}
@@ -383,33 +409,33 @@ so $\E{\mathbf{f}}{\I[\mathbf{f}]} = \frac{n}{2}$.
 Let $f(x) = \beta + \sumi \alpha_i x_i$. Then,
 
 \begin{align*}
-    \E{x}{f(x)^4} &= \beta^4 + \beta^3 \sumi \alpha_i \E{x}{x_i} + \beta^2 \sumi \sumj \alpha_i \alpha_j \E{x}{x_i x_j}\\
-    &+ \beta \sumi \sumj \sumk \alpha_i \alpha_j \alpha_k \E{x}{x_i x_j x_k} + \sumi \sumj \sumk \suml \alpha_i \alpha_j \alpha_k \alpha_\ell \E{x}{x_i x_j x_k x_\ell}\\
-    &= \beta^4 + \beta^2 \sumi \alpha_i^2 \E{}{x_i^2} + 2 \sum_{i \neq j} \alpha_i^2 \alpha_j^2 \E{}{x_i^2} \E{}{x_j^2} + \sumi \alpha_i^4 \E{}{x_i^4}\\
-    &\leq \beta^4 + \beta^2 \sumi \alpha_i^2 \E{}{x_i^2} + 2 \sum_{i \neq j} \alpha_i^2 \alpha_j^2 \E{}{x_i^2} \E{}{x_j^2} + 3 \sumi \alpha_i^4 \E{}{x_i^2}^2\\
-    &\leq \beta^4 + \beta^2 \sumi \alpha_i^2 \E{}{x_i^2} + 3 \sumi \sumj \alpha_i^2 \alpha_j^2 \E{}{x_i^2} \E{}{x_j^2}
+    \E[x]{f(x)^4} &= \beta^4 + \beta^3 \sumi \alpha_i \E[x]{x_i} + \beta^2 \sumi \sumj \alpha_i \alpha_j \E[x]{x_i x_j}\\
+    &+ \beta \sumi \sumj \sumk \alpha_i \alpha_j \alpha_k \E[x]{x_i x_j x_k} + \sumi \sumj \sumk \suml \alpha_i \alpha_j \alpha_k \alpha_\ell \E[x]{x_i x_j x_k x_\ell}\\
+    &= \beta^4 + \beta^2 \sumi \alpha_i^2 \E{x_i^2} + 2 \sum_{i \neq j} \alpha_i^2 \alpha_j^2 \E{x_i^2} \E{x_j^2} + \sumi \alpha_i^4 \E{x_i^4}\\
+    &\leq \beta^4 + \beta^2 \sumi \alpha_i^2 \E{x_i^2} + 2 \sum_{i \neq j} \alpha_i^2 \alpha_j^2 \E{x_i^2} \E{x_j^2} + 3 \sumi \alpha_i^4 \E{x_i^2}^2\\
+    &\leq \beta^4 + \beta^2 \sumi \alpha_i^2 \E{x_i^2} + 3 \sumi \sumj \alpha_i^2 \alpha_j^2 \E{x_i^2} \E{x_j^2}
 \end{align*}
 and
 
 \begin{align*}
-    \E{x}{f(x)^2}^2 &= \left(\beta^2 + \beta \sumi \alpha_i \E{x}{x_i} + \sumi \sumj \alpha_i \alpha_j \E{x}{x_i x_j}\right)^2\\
-    &= \left(\beta^2 + \sumi \alpha_i^2 \E{x}{x_i^2}\right)^2\\
-    &= \beta^4 + 2\beta^2 \sumi \alpha_i^2 \E{x}{x_i^2} + \sumi \sumj \alpha_i^4 \alpha_j^4 \E{}{x_i^2}^2 \E{}{x_j^2}^2.
+    \E[x]{f(x)^2}^2 &= \left(\beta^2 + \beta \sumi \alpha_i \E[x]{x_i} + \sumi \sumj \alpha_i \alpha_j \E[x]{x_i x_j}\right)^2\\
+    &= \left(\beta^2 + \sumi \alpha_i^2 \E[x]{x_i^2}\right)^2\\
+    &= \beta^4 + 2\beta^2 \sumi \alpha_i^2 \E[x]{x_i^2} + \sumi \sumj \alpha_i^4 \alpha_j^4 \E{x_i^2}^2 \E{x_j^2}^2.
 \end{align*}
 
-Comparing term by term, we see that $\E{x}{f(x)^4} \leq 3 \E{x}{f(x)^2}^2$; in fact, if the bits $x_i$ are 2-reasonable, then so is $f(x)$.
+Comparing term by term, we see that $\E[x]{f(x)^4} \leq 3 \E[x]{f(x)^2}^2$; in fact, if the bits $x_i$ are 2-reasonable, then so is $f(x)$.
 
 \subsection{}
 \begin{enumerate}[(a)]
     \item We have
 
     \begin{align*}
-        \E{}{f^4} &= \sum_{\substack{S,T,U,V \subseteq [n]\\\abs{S} = \abs{T} = \abs{U} = \abs{V} = k}} \E{}{x^S x^T x^U x^V}\\
-        &\geq \sum_{\substack{A_1, A_2, A_3, A_4, A_5, A_6 \subseteq [n]\\\abs{A_i} = k/3,~ A_i \cap A_j = \varnothing\\S = A_1 \cup A_2 \cup A_3\\T = A_4 \cup A_5 \cup A_6\\U = A_1 \cup A_3 \cup A_4\\V = A_2 \cup A_5 \cup A_6}} \E{}{\left(x^S\right)^2 \left(x^T\right)^2}\\
+        \E{f^4} &= \sum_{\substack{S,T,U,V \subseteq [n]\\\abs{S} = \abs{T} = \abs{U} = \abs{V} = k}} \E{x^S x^T x^U x^V}\\
+        &\geq \sum_{\substack{A_1, A_2, A_3, A_4, A_5, A_6 \subseteq [n]\\\abs{A_i} = k/3,~ A_i \cap A_j = \varnothing\\S = A_1 \cup A_2 \cup A_3\\T = A_4 \cup A_5 \cup A_6\\U = A_1 \cup A_3 \cup A_4\\V = A_2 \cup A_5 \cup A_6}} \E{\left(x^S\right)^2 \left(x^T\right)^2}\\
         &= \binom{n}{k/3, k/3, k/3, k/3, k/3, k/3, n - 2k}.
     \end{align*}
     Since
-    \eqn{\E{}{f^2} = \sum_{\substack{S, T \subseteq [n]\\\abs{S} = \abs{T} = k}} \E{}{x^S x^T} = \sum_{\substack{S [n]\\\abs{S} k}} \E{}{\left(x^S\right)^2} = \binom{n}{k},}
+    \eqn{\E{f^2} = \sum_{\substack{S, T \subseteq [n]\\\abs{S} = \abs{T} = k}} \E{x^S x^T} = \sum_{\substack{S [n]\\\abs{S} k}} \E{\left(x^S\right)^2} = \binom{n}{k},}
     the result follows.
 
     \item Indeed:
@@ -429,6 +455,127 @@ Comparing term by term, we see that $\E{x}{f(x)^4} \leq 3 \E{x}{f(x)^2}^2$; in f
         &= \Theta\left(\frac{n-k}{\sqrt{n(n-2k)}} \cdot \left(1 - \frac{k}{n}\right)^n \cdot \left(1 + \frac{k}{n-2k}\right)^{n-2k} \cdot \frac{9^k}{k^2}\right).
     \end{align*}
     Using $\lim_{n \to \infty} (n-k)/\sqrt{n(n-2k)} = 1$, as well as $\lim_{n \to \infty}(1-k/n)^n = e^{-k}$ and $\lim_{n \to \infty}(1-k/(n-2k))^{n-2k} = e^k$, we conclude that the ratio is $\Theta(k^{-2} 9^k)$. Finally, since $\norm{f}_4^4 = \Omega(k^{-2}) \cdot 9^k \norm{f}_2^4$, taking fourth roots on both sides shows the desired lower bound.
-    
 \end{enumerate}
+    
+\subsection{}
+As in the proof by induction of the Bonami lemma, we have:
+
+\begin{align*}
+    \E{f^4} &= \E{d^4} + 6 \E{d^2 e^2} + \E{e^4}\\
+    &\leq \E{d^4} + 6 \sqrt{\E{d^4} \E{e^4}} + \E{e^4} \text{ and}\\
+    \E{f^2} &= \E{d^2} + \E{e^2},
+\end{align*}
+and the induction hypothesis gives
+    
+\begin{align*}
+    \E{f^4} &\leq \max\set{B,9}^{k-1}\left(\E{d^2}^2 + 6 \cdot \sqrt{\max\set{B,9}} \cdot \E{d^2} \cdot \E{e^2} + \max\set{B,9} \cdot \E{e^2}^2\right)\\
+    &\leq \max\set{B,9}^k \cdot \left(\E{d^2} + \E{e^2}\right)^2 = \max\set{B,9}^k \cdot \E{f^2}^2.
+\end{align*}
+
+\subsection{}
+Define $x = \sqrt{1 + 39 \sqrt{\delta}}$ and $y = \sqrt{1 - 39 \sqrt{\delta}}$, and note that $(x^2 - 1)^2/9 = (y^2 - 1)^2/9 = 169 \delta$. We perform a case analysis, where, for $\ell$, we have $\ell > x$, $\ell < -x$ or $-y < \ell < y$; and, for $f$, we have either $f = 1$ or $f = -1$.
+
+The cases $\ell > x$ and $f = 1$, as well as $-y < \ell < y$ and $f = 1$, imply the remaining four. In the first, we have
+\begin{align*}
+    (f - \ell)^2 - 169 \delta &= (\ell - 1)^2 - \frac{(x^2 - 1)^2}{9}\\
+    &> (x - 1)^2 - \frac{(x^2 - 1)^2}{9}\\
+    &= (x - 1)^2 \left(1 - \frac{(x + 1)^2}{9}\right)\\
+    &= - \frac{(x - 1)^2 (x - 2) (x + 4)}{9}\\
+    &> 0,
+\end{align*}
+since $x \in (1,2)$. The second case is essentially the same:
+\begin{align*}
+    (f - \ell)^2 - 169 \delta &= (\ell - 1)^2 - \frac{(y^2 - 1)^2}{9}\\
+    &> (y - 1)^2 - \frac{(y^2 - 1)^2}{9}\\
+    &= - \frac{(y - 1)^2 (y - 2) (y + 4)}{9}\\
+    &> 0,
+\end{align*}
+since $y \in (0,1)$.
+
+\subsection{}
+\begin{enumerate}[(a)]
+    \item We have
+    \begin{align*}
+        \norm{\T_{\frac{1-\delta}{\sqrt{3}}} f}_4 &= \left(\sumk \norm{\T_{\frac{1-\delta}{\sqrt{3}}} f^{=k}}^4_4\right)^{1/4}\\
+        &\leq \sumk \norm{\T_{\frac{1-\delta}{\sqrt{3}}} f^{=k}}_4\\
+        &\leq \sumk \sqrt{3}^k \cdot \left(\frac{1-\delta}{\sqrt{3}}\right)^k \norm{f^{=k}}_2\\
+        &= \sumk (1 - \delta)^k \norm{f^{=k}}_2,
+    \end{align*}
+    where the last inequality is the Bonami lemma. \TODO
+    
+    \item Indeed:
+    \begin{align*}
+        \norm{\T_\rho(g^{\oplus d})}_p &= \E[x]{\E[y \sim N_\rho(x)]{g^{\oplus d}(y)}^p}^{1/p}\\
+        &= \E[x^{(1)}, \ldots, x^{(d)}]{\E[y^{(1)} \sim N_\rho(x^{(1)}), \ldots, y^{(d)} \sim N_\rho(x^{(d)})]{\prod_{i \in [d]} g(y^{(i)})}^p}^{1/p}\\
+        &= \E[x^{(1)}, \ldots, x^{(d)}]{ \prod_{i \in [d]} \E[y^{(i)} \sim N_\rho(x^{(i)})]{g(y^{(i)})}^p}^{1/p}\\
+        &= \prod_{i \in [d]}\E[x^{(i)}]{\E[y^{(i)} \sim N_\rho(x^{(i)})]{g(y^{(i)})}^p}^{1/p}\\
+        &= \prod_{i \in [d]} \norm{\T_\rho g}_p\\
+        &= \norm{\T_\rho g}_p^d.
+    \end{align*}
+    
+    \item For any $d \in \N$, we have
+    \begin{align*}
+        \norm{\T_{\frac{1-\delta}{\sqrt{3}}} f^{\oplus d}}_4 &= \norm{\T_{\frac{1-\delta}{\sqrt{3}}} f}^d\\
+        &\leq \frac1{\delta} \norm{f^{\oplus d}}_2\\
+        &= \frac1{\delta} \norm{f}_2^d,
+    \end{align*}
+    so that $\norm{\T_{\frac{1-\delta}{\sqrt{3}}} f} \leq \delta^{-1/d} \norm{f}_2$. Taking $d \to \infty$ proves the inequality.
+    
+    \item Continuity of the norm and of the noise operator (as a function of $\delta$, with $f$ fixed) implies $\norm{\T_{\frac1{\sqrt{3}}} f}_4 = \lim_{\delta \to 0^+} \norm{\T_{\frac{1-\delta}{\sqrt{3}}} f}_4 \leq \norm{f}_2$.
+\end{enumerate}
+
+\subsection{}
+Since $\abs{\T_\rho f} \leq T_\rho \abs{f}$ pointwise, we have $\norm{T_\rho f}_q \leq \norm{T_\rho \abs{f}}_q$. Proving the inequality for non-negative functions would show $\norm{T_\rho \abs{f}}_q \leq \norm{\abs{f}}_p = \norm{f}_p$, and the result follows.
+
+\subsection{}
+
+\subsection{}
+\begin{enumerate}[(a)]
+    \item Indeed: taking the coefficient multiplying $X$ to be $bc$, we have $\norm{a + b \rho (c X)}_q \leq \norm{a + b (c X)}_p$ for all $a, b \in \R$, i.e., $cX$ is $(p, q, \rho)$-hypercontractive.
+    
+    \item Taking $a = 0$ and $b = 1$ in the statement of hypercontractivity, we have $\rho \norm{X}_q = \norm{\rho X}_q \leq \norm{X}_p$. Dividing by $\norm{X}_q$ yields the inequality (assuming the random variable is not identically zero).
+\end{enumerate}
+
+\subsection{}
+\begin{enumerate}[(a)]
+    \item Discreteness implies $X$ is bounded, and the latter is enough for the expectation of error terms to have the same order. Since $1 + \rho \eps X > 0$ for small enough $\abs{\eps}$, we have, for any $1 \leq r \leq \infty$,
+    \eqn{\norm{1 + \rho \eps X}_r = \left(1 + r \rho \eps \E{X} + \frac{r (r - 1) \rho^2}{2} \eps^2 \E{X^2} + O(\eps^3)\right)^{1/r}.}
+    
+    Therefore, by the $(p,q,\rho)$-hypercontractivity of $X$ (which implies $(p,q,\abs{\eps} \rho)$-hypercontractivity as well),
+    \begin{align*}
+        1 + q \rho \eps \E{X} + \frac{q (q - 1) \rho^2}{2} \eps^2 \E{X^2} &\leq \left(1 + p \eps \E{X} + \frac{p (p - 1)}{2} \eps^2 \E{X^2} + O(\eps^3)\right)^{q/p}\\
+        &=  1 + q \eps \E{X} + \frac{q (p - 1)}{2} \eps^2 \E{X^2} +  O(\eps^3),
+    \end{align*}
+    
+    by taking another Taylor expansion. Rearranging, we have $\eps \E{X} \leq \alpha \eps^2 + O(\eps^3)$ for some nonzero $\alpha \in \R$. Thus taking the limits $\eps \to 0^+$ and $\eps \to 0^-$ imply $\E{X} \geq 0$ and $\E{X} \leq 0$ (not necessarily in this order, so equality follows.
+    
+    \item Taking the Taylor expansion of the previous item and plugging in $\E{X} = 0$ yields
+    \eqn{\frac{q (q - 1) \rho^2}{2} \eps^2 \E{X^2} \leq \frac{q (p - 1)}{2} \eps^2 \E{X^2} +  O(\eps^3).}
+    Dividing by $\eps^2$ and rearranging,
+    \eqn{\left((q - 1)\rho^2 - (p - 1)\right) \frac{q \E{X}}{2} \leq O(\eps).}
+    For this to hold for all $\eps$, the right-hand side must be non-positive; equivalently,
+    \eqn{(q - 1) \rho^2 \leq p - 1 \iff \rho \leq \sqrt{\frac{p - 1}{q - 1}}.} 
+\end{enumerate}
+
+\subsection{}
+\begin{enumerate}[(a)]
+    \item We need to show that, for every $a \in \R$ and $q \geq 1$, the inequality $\abs{a} = \norm{a}_q \leq \norm{a + X}_q$. By monotonicity of norms, $\norm{a + X}_q \geq \norm{a + X}_1$, so we need only show the inequality for $q = 1$. But $\norm{a + X}_1 = \E{\abs{a + X}} \geq \abs{a + \E{X}} = \abs{a}$, since $\E{X} = 0$.
+    
+    \item We have
+    \begin{align*}
+        \norm{a + \rho X}_q &\leq (1 - \rho) \abs{a} + \rho \norm{a + X}_q\\
+        &\leq (1 - \rho) \norm{a + X}_q + \rho \norm{a + X}_q\\
+        &= \norm{a + X}_q,
+    \end{align*}
+    where the second inequality follows from the previous item.
+    
+    \item We know, from the previous exercise, that $(p, q, \rho)$ hypercontractivity of $X$ implies $\E{X} = 0$; so, by item (b), $X$ is also $(q,q,\rho'/\rho)$-hypercontractive for every $\rho' < \rho$ (since $\rho'/\rho < 1$). Thus,
+    \begin{align*}
+        \norm{a + \rho' X}_q &= \rho \norm{\frac{a}{\rho} + \frac{\rho'}{\rho} X}_q\\
+        &\leq \rho \norm{\frac{a}{\rho} + X}_q\\
+        &= \norm{a + \rho X}_q\\
+        &\leq \norm{a + X}_p.
+    \end{align*}
+\end{enumerate}
+
 \end{document}
